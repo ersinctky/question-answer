@@ -4,6 +4,7 @@ const connectDatabase = require("./helpers/database/connectDatabase");
 const customErrorHandlers = require("./middlewares/errors/customErrorHandlers");
 const routers = require("./routers/index");
 const app = express();
+const path = require("path");
 
 
 
@@ -31,7 +32,9 @@ app.use("/api",routers);
 
 app.use(customErrorHandlers);
 
-
+// static files
+console.log(__dirname);
+app.use(express.static(path.join(__dirname,"public")));
 
 
 
