@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const crypto = require("crypto");
 const UserSchema = new Schema({
     name:{
         type:String,
@@ -53,6 +53,12 @@ const UserSchema = new Schema({
     blocked:{
         type:Boolean,
         default:false
+    },
+    resetPasswordToken:{
+         type:String
+    },
+    resetPasswordExpire:{
+        type:Date
     }
 });
 // user schema methods
@@ -67,6 +73,19 @@ UserSchema.methods.generateJwtFromUser= function(){
     });
     return token;
 }
+
+UserSchema.methods.getResetPasswordTokenFromUser= function(){
+    const randomHexString = crypto.randomBytes(15).toString("hex");
+    const {RESET_PASSWORD_EXPIRE}=process.env;
+    const resetPasswordToken = crypto
+    .createHash("SHA256")
+    .update(randomHexString)
+    .digest("hex");
+
+    this.resetPasswordToken = resetPasswordToken,
+    this.resetPasswordExpire = Date.now() + parseInt(RESET_PASSWORD_EXPIRE);
+
+} 
 UserSchema.pre("save",function(next){
     // parola değişme
     if(!this.isModified("password")){
