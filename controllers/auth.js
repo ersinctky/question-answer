@@ -161,6 +161,23 @@ const resetPassword =asyncErrorWraapper(async(req,res,next)=>{
 
 });
 
+const editDetails=asyncErrorWraapper(async(req,res,next)=>{
+
+const editInformation = req.body;
+
+const user = User.findByIdAndUpdate(req.user.id,editInformation,{
+    new:true,
+    runValidators:true
+});
+return res.status(200)
+    .json({
+        success:true,
+        data:user
+    });
+
+
+});
+
 module.exports = {
     register,
     login,
@@ -168,5 +185,6 @@ module.exports = {
     getUser,
     imageUpload,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    editDetails
 };
