@@ -161,7 +161,7 @@ const resetPassword =asyncErrorWraapper(async(req,res,next)=>{
 
 });
 
-const editDetails=asyncErrorWraapper(async(req,res,next)=>{
+const editDetails= asyncErrorWraapper(async(req,res,next)=>{
 
 const editInformation = req.body;
 

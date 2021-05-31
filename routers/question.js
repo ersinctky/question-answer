@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const {getAllQuestions} = require("../controllers/question");
+const {askNewQuestion} = require("../controllers/question");
+const {getAccessToRoute}=require("../middlewares/authorization/auth");
 
-router.get("/",getAllQuestions);
+router.post("/ask",getAccessToRoute,askNewQuestion);
 
 
 
