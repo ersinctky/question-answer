@@ -11,7 +11,7 @@ const getAllQuestions = asyncErrorWraapper (async (req,res,next) => {
     data:question
 });
     
-    });
+});
 
 const askNewQuestion = asyncErrorWraapper (async (req,res,next) => {
 
