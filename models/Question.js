@@ -17,7 +17,7 @@ const QuestionSchema = new Schema({
     slug:String,
     createdAt:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
     user:{
         type:mongoose.Schema.ObjectId,
@@ -28,6 +28,12 @@ const QuestionSchema = new Schema({
         {
             type:mongoose.Schema.ObjectId,
             ref:"User"
+        }
+    ],
+    answers:[
+        {
+            type:mongoose.Schema.ObjectId,
+            ref:"Answer"
         }
     ]
 });
