@@ -4,7 +4,18 @@ const asyncErrorWraapper = require("express-async-handler");
 
 const getAllQuestions = asyncErrorWraapper (async (req,res,next) => {
 
-   const question= await Question.find();
+    let query = Question.find();
+    if(req.query.search){
+        const searchObject ={};
+        const regex = new RegExp(req.query.search,"i");
+        searchObject["title"]=regex;
+        query = query.where(searchObject);
+    }
+    
+    const question = await query;
+    // console.log(req.query.search);
+
+//    const question= await Question.find().where({title:"Questions 3 - Title"});
 
    res.status(200).json({
     success:true,
