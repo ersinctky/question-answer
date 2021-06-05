@@ -4,80 +4,8 @@ const asyncErrorWraapper = require("express-async-handler");
 
 const getAllQuestions = asyncErrorWraapper (async (req,res,next) => {
     
-    const populate = true;
-    const populateObject = {
-        path:"user",
-        select:"name profile_image"
-    };
-    let query = Question.find();
-   // search
 
-    if(req.query.search){
-        const searchObject ={};
-        const regex = new RegExp(req.query.search,"i");
-        searchObject["title"]=regex;
-        query = query.where(searchObject);
-    }
-    
-    // populate
-
-    if(populate){
-        query = query.populate(populateObject)
-    }
-
-    // pagination
-
-    const page = parseInt(req.query.page) || 1;
-
-    const limit = parseInt(req.query.limit) || 5;
-
-    const startIndex = (page-1)*limit;
-    const endIndex = page*limit;
-
-    const pagination = {};
-    const total = await Question.countDocuments();
-    if(startIndex>0){
-        pagination.previous={
-            page:page-1,
-            limit:limit
-        }
-    }
-    if(endIndex<total){
-        pagination.next={
-            page:page+1,
-            limit:limit
-        }
-    }
-    
-    query= query.skip(startIndex).limit(limit);
-    
-
-    // sorting 
-
-    const sortKey = req.query.sortBy;
-
-    if(sortKey==="most-answered"){
-      query = query.sort("-answerCount -createdAt")
-    }
-    if(sortKey==="most-liked"){
-        query = query.sort("-likeCount -createdAt")
-
-    }
-    else{
-        query = query.sort("-createdAt")
-
-    }
-    const question = await query;
-    // console.log(req.query.search);
-
-//    const question= await Question.find().where({title:"Questions 3 - Title"});
-
-   return res.status(200).json({
-    success:true,
-    count:question.length,
-    pagination:pagination,
-    data:question
-});
+   return res.status(200).json( res.queryResults);
     
 });
 
