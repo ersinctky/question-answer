@@ -18,6 +18,8 @@ const {
   getQuestionOwnerAccess,
 } = require("../middlewares/authorization/auth");
 const questionQueryMiddleware = require("../middlewares/query/questionQueryMiddleware");
+const answerQueryMiddleware = require("../middlewares/query/answerQueryMiddleware");
+
 const router = express.Router();
 router.get(
   "/",
@@ -29,7 +31,24 @@ router.get(
   }),
   getAllQuestions
 );
-router.get("/:id", checkQuestionExist, getSingleQuestions);
+
+router.get(
+  "/:id",
+  checkQuestionExist,
+  answerQueryMiddleware(Question, {
+    population: [
+      {
+        path: "user",
+        select: "name profile_image",
+      },
+      {
+        path: "answers",
+        select: "content",
+      },
+    ],
+  }),
+  getSingleQuestions
+);
 router.get("/:id/like", [getAccessToRoute, checkQuestionExist], likeQuestion);
 router.get(
   "/:id/undo_like",
@@ -49,6 +68,6 @@ router.delete(
   deleteQuestion
 );
 
-router.use("/:question_id/answers",    checkQuestionExist, answer);
+router.use("/:question_id/answers", checkQuestionExist, answer);
 
 module.exports = router;
