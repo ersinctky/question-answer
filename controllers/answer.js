@@ -90,7 +90,7 @@ const getSingleAnswer = asyncErrorWraapper (async (req,res,next) => {
     const question = await Question.findById(question_id);
 
     question.answers.splice(question.answers.indexOf(answer_id),1); 
-
+    question.answerCount = question.answer.length;
 
     await question.save();
     
